@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Travel Document Analysis</h2>
+
+<p>
+    Upload a clear image of a passport, visa or other travel document.
+</p>
+
+<input id="image" type="file" accept="image/*">
+
+<br>
+
+<button onclick="analyze()">Analyze Document</button>
+
+<pre id="output"></pre>
+
+<script>
+
+async function analyze() {
+
+    const file = document.getElementById("image").files[0];
+
+    if (!file) {
+        document.getElementById("output").textContent =
+            "Please upload an image.";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    document.getElementById("output").textContent =
+        "Analyzing document...";
+
+    const response = await fetch(
+        "/api/document-analysis",
+        {
+            method: "POST",
+            body: formData
+        }
+    );
+
+    const data = await response.json();
+
+    document.getElementById("output").textContent =
+        data.result || data.error;
+}
+
+</script>
+
+{% endblock %}

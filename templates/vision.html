@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Travel Image Vision</h2>
+
+<p>
+    Upload a travel-related image and ask the AI to analyze it.
+</p>
+
+<input id="image" type="file" accept="image/*">
+
+<textarea id="prompt" rows="4">
+Analyze this image and describe what you can see.
+</textarea>
+
+<button onclick="analyze()">Analyze Image</button>
+
+<pre id="output"></pre>
+
+<script>
+
+async function analyze() {
+
+    const file = document.getElementById("image").files[0];
+
+    if (!file) {
+        document.getElementById("output").textContent =
+            "Please upload an image.";
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("image", file);
+    formData.append(
+        "prompt",
+        document.getElementById("prompt").value
+    );
+
+    document.getElementById("output").textContent =
+        "Analyzing image...";
+
+    const response = await fetch(
+        "/api/vision",
+        {
+            method: "POST",
+            body: formData
+        }
+    );
+
+    const data = await response.json();
+
+    document.getElementById("output").textContent =
+        data.result || data.error;
+}
+
+</script>
+
+{% endblock %}

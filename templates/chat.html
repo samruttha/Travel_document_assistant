@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Travel Document Chat</h2>
+
+<p>
+    Ask questions about passports, visas, travel documents,
+    expiry dates, and travel requirements.
+</p>
+
+<textarea
+    id="p"
+    rows="5"
+    placeholder="Example: What documents are required for international travel?"
+></textarea>
+
+<button onclick="go()">Send</button>
+
+<h3>Prompt Information</h3>
+
+<h4>System Prompt</h4>
+<pre id="systemPrompt">You are a Travel Document Assistant.
+
+You help users understand travel documents such as:
+
+* Passports
+* Visas
+* Travel permits
+* Entry requirements
+* Document validity
+
+Give simple and clear answers.
+Do not guess or invent information.</pre>
+
+<h4>User Prompt</h4>
+<pre id="userPrompt">Your question will appear here.</pre>
+
+<h4>AI Response</h4>
+<pre id="o">Your AI response will appear here.</pre>
+
+<script>
+async function go() {
+
+    const message = document.getElementById("p").value.trim();
+    const userPrompt = document.getElementById("userPrompt");
+    const output = document.getElementById("o");
+
+    if (!message) {
+        output.textContent = "Please enter a question.";
+        return;
+    }
+
+    // Show the user's prompt
+    userPrompt.textContent = message;
+
+    // Show loading message
+    output.textContent = "Loading...";
+
+    try {
+
+        const response = await fetch(
+            "/api/chat",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: message
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        output.textContent =
+            data.reply || data.error || "Something went wrong.";
+
+    } catch (error) {
+
+        output.textContent =
+            "Unable to connect to the server.";
+
+    }
+}
+</script>
+
+{% endblock %}

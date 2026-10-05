@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Travel Document Assistant</h1>
+
+<p>
+    An AI assistant that helps you understand and analyze
+    travel documents using Azure OpenAI.
+</p>
+
+<div class="grid">
+
+    <a class="card" href="/chat">
+        <h3>Travel Document Chat</h3>
+        <p>
+            Ask questions about passports, visas,
+            travel documents and requirements.
+        </p>
+    </a>
+
+
+    <a class="card" href="/document-analysis">
+        <h3>Document Analysis</h3>
+        <p>
+            Upload a passport, visa or travel document
+            image and extract clearly visible information.
+        </p>
+    </a>
+
+
+    <a class="card" href="/vision">
+        <h3>Travel Image Vision</h3>
+        <p>
+            Upload a travel-related image and ask
+            the AI to analyze what it sees.
+        </p>
+    </a>
+
+</div>
+
+{% endblock %}
